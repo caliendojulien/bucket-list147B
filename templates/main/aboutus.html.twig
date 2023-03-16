@@ -1,6 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias beatae consequatur deleniti eius enim ex hic incidunt minima, mollitia nesciunt nostrum officia quaerat quasi quos rem, sapiente soluta, tempora voluptatem.</p>
+    <section class="team-members">
+        {% for chaqueMembre in team %}
+        <article>
+            <img src="{{ chaqueMembre.picture }}" alt="">
+            <div>
+                <h3>
+                    {{ chaqueMembre.firstname }} {{ chaqueMembre.lastname }}
+                    {{ chaqueMembre.lastname == "Potencier" ? "&#128151" : "" }}
+                </h3>
+            </div>
+        </article>
+        {% endfor %}
+    </section>
 {% endblock %}
 

@@ -101,3 +101,16 @@ footer {
         margin-left: 20px;
     }
 }
+
+main a {
+    color: #8c6956;
+}
+
+.wishes-list article {
+    margin-bottom: 0.5rem;
+}
+
+.wish-credit {
+    font-size: 0.9rem;
+    font-style: italic;
+}
