@@ -1,0 +1,7 @@
+when@dev: &dev
+    zenstruck_foundry:
+        faker:
+            locale: fr_FR
+        auto_refresh_proxies: true
+## config/package/zenstruck_foundry.yaml ##
+when@test: *dev
