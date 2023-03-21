@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Wish;
 use App\Form\WishType;
+use App\Repository\UserRepository;
 use App\Repository\WishRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/wish', name: 'wish')] // Prefixe
 class WishController extends AbstractController
@@ -34,7 +36,7 @@ class WishController extends AbstractController
     {
         $wishForm = $this->createForm(WishType::class, $wish);
         $wishForm->handleRequest($request);
-        if($wishForm->isSubmitted() && $wishForm->isValid()) {
+        if ($wishForm->isSubmitted() && $wishForm->isValid()) {
             $entityManager->persist($wish); // UPDATE
             $entityManager->flush();
             return $this->redirectToRoute('wish_list');
@@ -45,6 +47,7 @@ class WishController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/', name: '_list')]
     public function list(
         WishRepository $wishRepository
@@ -58,6 +61,7 @@ class WishController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/detail/{wish}', name: '_detail')]
     public function detail(
         Wish $wish
@@ -71,13 +75,17 @@ class WishController extends AbstractController
         );
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/nouveau', name: '_nouveau')]
     public function nouveau(
         Request                $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserRepository         $userRepository
     ): Response
     {
         $wish = new Wish();
+        $utilisateurConnecte = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
+        $wish->setAuthor($utilisateurConnecte->getEmail());
         $wishForm = $this->createForm(WishType::class, $wish);
         $wishForm->handleRequest($request);
         if ($wishForm->isSubmitted() && $wishForm->isValid()) {
