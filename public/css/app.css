@@ -114,3 +114,7 @@ main a {
     font-size: 0.9rem;
     font-style: italic;
 }
+
+.input-author {
+    border: 1px solid #a12929;
+}

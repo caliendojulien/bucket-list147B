@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\User;
 use App\Entity\Wish;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,21 +17,16 @@ class WishType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('author')
-//            ->add('categorie', CategoryType::class,
-//                [
-//                    "data_class" => null,
-//                    "mapped" => false
-//                ])
+//            ->add('author', EntityType::class, [
+//                'class' => User::class,
+//                'choice_label' => 'username',
+//            ])
             ->add('categories', EntityType::class,
                 [
                     'class' => Category::class,
                     'choice_label' => 'name',
                     'multiple' => true,
                     "expanded" => true,
-                    "attr" => [
-                        "class" => "maClasse"
-                    ]
                 ]
             );
     }

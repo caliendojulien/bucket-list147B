@@ -50,12 +50,19 @@ class WishController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route('/', name: '_list')]
     public function list(
-        WishRepository $wishRepository
+        WishRepository $wishRepository,
+        UserRepository $userRepository
     ): Response
     {
+        // Méthode Jeremy
         $wishes = $wishRepository->findBy(
-            ["isPublished" => true]
+            [
+                "isPublished" => true,
+                "author" => $this->getUser()
+            ]
         );
+        // Méthode Laurent
+        $wishes = $this->getUser()->getWishes();
         return $this->render('wish/list.html.twig',
             compact('wishes')
         );
@@ -79,19 +86,19 @@ class WishController extends AbstractController
     #[Route('/nouveau', name: '_nouveau')]
     public function nouveau(
         Request                $request,
-        EntityManagerInterface $entityManager,
-        UserRepository         $userRepository
+        EntityManagerInterface $entityManager
     ): Response
     {
         $wish = new Wish();
-        $utilisateurConnecte = $userRepository->findOneBy(["username" => $this->getUser()->getUserIdentifier()]);
-        $wish->setAuthor($utilisateurConnecte->getEmail());
         $wishForm = $this->createForm(WishType::class, $wish);
         $wishForm->handleRequest($request);
         if ($wishForm->isSubmitted() && $wishForm->isValid()) {
             try {
                 $wish->setDateCreated(new \DateTime());
                 $wish->setIsPublished(true);
+
+                $wish->setAuthor($this->getUser());
+
                 $entityManager->persist($wish);
                 $entityManager->flush();
                 $this->addFlash('succes', 'Le souhait a bien été inséré');
