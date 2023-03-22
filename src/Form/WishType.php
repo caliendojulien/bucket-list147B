@@ -26,7 +26,7 @@ class WishType extends AbstractType
                     'class' => Category::class,
                     'choice_label' => 'name',
                     'multiple' => true,
-                    "expanded" => true,
+                    'expanded' => true,
                 ]
             );
     }

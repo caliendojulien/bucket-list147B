@@ -27,6 +27,7 @@ class MainController extends AbstractController
     {
         $fichier = file_get_contents(__DIR__.'/../../data/team.json');
         $team = json_decode($fichier, true);
+
         return $this->render(
             'main/aboutus.html.twig',
             compact('team')
